@@ -9,8 +9,11 @@ const PageLoader = ({ onLoadComplete }) => {
   const textRef = useRef(null);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
     const tl = gsap.timeline({
       onComplete: () => {
+        document.body.style.overflow = '';
         if (onLoadComplete) onLoadComplete();
       }
     });
@@ -34,19 +37,21 @@ const PageLoader = ({ onLoadComplete }) => {
       ease: "power3.out"
     }, 0.3);
 
-    // Fade out counter and text
     tl.to([counterRef.current, textRef.current], {
       opacity: 0,
-      duration: 0.5,
+      duration: 0.4,
       ease: "power2.in"
-    }, "-=0.5");
+    }, "-=0.3");
 
-    // Split and slide away overlays
+    tl.set([counterRef.current, textRef.current], {
+      display: "none"
+    });
+
     tl.to(overlayTopRef.current, {
       yPercent: -100,
       duration: 1,
       ease: "power4.inOut"
-    }, "-=0.3");
+    });
 
     tl.to(overlayBottomRef.current, {
       yPercent: 100,
@@ -54,10 +59,8 @@ const PageLoader = ({ onLoadComplete }) => {
       ease: "power4.inOut"
     }, "<");
 
-    // Remove loader from DOM
-    tl.to(loaderRef.current, {
-      display: "none",
-      duration: 0
+    tl.set(loaderRef.current, {
+      display: "none"
     });
 
     return () => {
@@ -68,23 +71,25 @@ const PageLoader = ({ onLoadComplete }) => {
   return (
     <div
       ref={loaderRef}
-      className="fixed inset-0 z-50 pointer-events-none"
+      className="fixed inset-0 z-[9999]"
+      style={{ pointerEvents: 'none' }}
     >
+
       <div
         ref={overlayTopRef}
-        className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-black to-black"
+        className="absolute top-0 left-0 w-full h-1/2 bg-black"
       />
       
-      {/* Bottom Overlay */}
+
       <div
         ref={overlayBottomRef}
-        className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black to-black"
+        className="absolute bottom-0 left-0 w-full h-1/2 bg-black"
       />
 
-      {/* Counter and Text Container */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
         <div className="relative">
-          {/* Counter */}
+
           <div className="text-center mb-6">
             <span
               ref={counterRef}
@@ -95,7 +100,6 @@ const PageLoader = ({ onLoadComplete }) => {
             <span className="text-6xl md:text-7xl font-bold text-white/60">%</span>
           </div>
 
-          {/* Loading Text */}
           <div className="overflow-hidden">
             <p
               ref={textRef}
@@ -105,7 +109,6 @@ const PageLoader = ({ onLoadComplete }) => {
             </p>
           </div>
 
-          {/* Animated dots */}
           <div className="flex justify-center gap-2 mt-8">
             {[0, 1, 2].map((i) => (
               <div
