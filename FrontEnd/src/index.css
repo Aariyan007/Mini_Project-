@@ -1,1 +1,17 @@
 @import "tailwindcss";
+/* Add to your global CSS file or index.html <style> tag */
+html, body {
+  background-color: #000;
+}
+
+/* Prevent flash of unstyled content */
+body {
+  opacity: 0;
+  animation: fadeInBody 0.3s ease-in forwards;
+}
+
+@keyframes fadeInBody {
+  to {
+    opacity: 1;
+  }
+}

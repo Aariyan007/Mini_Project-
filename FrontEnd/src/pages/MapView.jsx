@@ -72,12 +72,10 @@ function MapView() {
 
     const beepIntervalRef = useRef(null);
 
-    // Shortened routes
     const routeLisie = [[9.9908649, 76.3021516], [9.9911956, 76.3021332], [9.9930340, 76.3018243], [9.9954740, 76.3014861], [9.9960327, 76.3013843], [10.000012, 76.299828], [10.000501, 76.299491], [9.999308, 76.297643], [9.998461, 76.296715], [9.996584, 76.294248], [9.994999, 76.292152], [9.992308, 76.289544], [9.990960, 76.287916], [9.989032, 76.288637], [9.988078, 76.288166]];
     const routeAsterMedcity = [];
     const routeRennai = [];
 
-    // SYNC STORAGE FUNCTIONS
     const saveSyncState = async (data) => {
         try {
             await window.storage.set('ambulance_sync', JSON.stringify(data), true);
@@ -95,19 +93,18 @@ function MapView() {
         }
     };
 
-// Broadcast current ambulance state
   useEffect(() => {
     if (!isMaster) {
-      console.log('📱 Not master - not broadcasting');
+      console.log('Not master - not broadcasting');
       return;
     }
     
     if (!route.length) {
-      console.log('⚠️ No route set - not broadcasting');
+      console.log('No route set - not broadcasting');
       return;
     }
 
-    console.log('🚑 MASTER: Starting broadcast');
+    console.log('MASTER: Starting broadcast');
 
     const broadcastState = async () => {
       const threshold = getThresholdDistance();
@@ -134,7 +131,7 @@ function MapView() {
         arrived: arrived
       };
 
-      console.log('📡 Broadcasting:', {
+      console.log('Broadcasting:', {
         position: currentPosition,
         nearbySignals: nearbySignals.length,
         criticality
@@ -146,7 +143,7 @@ function MapView() {
     broadcastState();
     const interval = setInterval(broadcastState, 200);
     return () => {
-      console.log('🛑 Stopping master broadcast');
+      console.log('Stopping master broadcast');
       clearInterval(interval);
     };
   }, [isMaster, currentPosition, criticality, signals, route, segmentIndex, arrived, deviceId]);
@@ -154,33 +151,33 @@ function MapView() {
 // Listen for sync state changes (follower devices)
   useEffect(() => {
     if (isMaster) {
-      console.log('🚑 Running as MASTER - not listening for sync');
+      console.log('Running as MASTER - not listening for sync');
       return;
     }
 
-    console.log('📱 Running as FOLLOWER - starting sync listener');
+    console.log('Running as FOLLOWER - starting sync listener');
 
     const checkSyncState = async () => {
       try {
         const syncData = await getSyncState();
         
         if (!syncData) {
-          console.log('⚠️ No sync data found in storage');
+          console.log('No sync data found in storage');
           return;
         }
 
         if (syncData.masterId === deviceId) {
-          console.log('⚠️ Ignoring own broadcast');
+          console.log('Ignoring own broadcast');
           return;
         }
 
         const age = Date.now() - syncData.timestamp;
         if (age > 2000) {
-          console.log('⚠️ Sync data too old:', age, 'ms');
+          console.log('Sync data too old:', age, 'ms');
           return;
         }
 
-        console.log('✅ SYNCING! Master position:', syncData.position);
+        console.log('SYNCING! Master position:', syncData.position);
 
         // Update follower's view with master's position
         if (syncData.position) {
@@ -236,24 +233,22 @@ function MapView() {
           }
         } else {
           if (beepIntervalRef.current) {
-            console.log('🔇 Stopping beeps');
+            console.log('Stopping beeps');
             clearInterval(beepIntervalRef.current);
             beepIntervalRef.current = null;
           }
         }
       } catch (error) {
-        console.error('❌ Sync error:', error);
+        console.error('Sync error:', error);
       }
     };
 
-    // Run immediately
     checkSyncState();
 
-    // Then set up interval
     syncIntervalRef.current = setInterval(checkSyncState, 200);
     
     return () => {
-      console.log('🛑 Stopping follower sync listener');
+      console.log('Stopping follower sync listener');
       if (syncIntervalRef.current) {
         clearInterval(syncIntervalRef.current);
       }
