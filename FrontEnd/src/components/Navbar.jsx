@@ -15,7 +15,6 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    // Initial animation
     if (navRef.current) {
       navRef.current.style.transform = 'translateX(-50%) translateY(-20px)';
       navRef.current.style.opacity = '0';
@@ -27,7 +26,6 @@ const Navbar = () => {
       }, 100);
     }
 
-    // Animate menu items
     menuItemsRef.current.forEach((item, index) => {
       if (item) {
         item.style.opacity = '0';
@@ -57,10 +55,8 @@ const Navbar = () => {
     
     setActiveIndex(index);
     
-    // Lift effect
     element.style.transform = 'translateY(-6px)';
     
-    // Move indicator
     if (indicatorRef.current) {
       const itemWidth = element.offsetWidth;
       const itemLeft = element.offsetLeft;
@@ -85,12 +81,9 @@ const Navbar = () => {
           boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
         }}
       >
-        {/* Glow effect */}
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500/20 to-red-600/20 blur-xl -z-10" />
         
-        {/* Menu Items */}
         <div className="flex items-center gap-1.5 relative">
-          {/* Active indicator */}
           <div
             ref={indicatorRef}
             className="absolute bottom-0 h-0.5 rounded-full bg-gradient-to-r from-red-500 to-red-600 transition-all duration-500 ease-out"
