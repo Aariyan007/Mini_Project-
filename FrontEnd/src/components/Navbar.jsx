@@ -39,7 +39,6 @@ const Navbar = () => {
       }
     });
 
-    // Set initial indicator position
     setTimeout(() => {
       if (menuItemsRef.current[0] && indicatorRef.current) {
         const firstItem = menuItemsRef.current[0];
@@ -70,20 +69,20 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-6 left-[66%] -translate-x-1/2 z-50">
+    <nav className="fixed top-7 left-[66%] -translate-x-1/2 z-50">
       <div
         ref={navRef}
-        className="relative px-3 py-1 rounded-full"
+        className="relative px-7 py-2.5 rounded-full"
         style={{
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(20px)',
           border: '1px solid rgba(255, 255, 255, 0.18)',
-          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+          boxShadow: '0 10px 36px 0 rgba(0, 0, 0, 0.40)'
         }}
       >
         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500/20 to-red-600/20 blur-xl -z-10" />
         
-        <div className="flex items-center gap-1.5 relative">
+        <div className="flex items-center gap-2 relative">
           <div
             ref={indicatorRef}
             className="absolute bottom-0 h-0.5 rounded-full bg-gradient-to-r from-red-500 to-red-600 transition-all duration-500 ease-out"
@@ -97,7 +96,7 @@ const Navbar = () => {
               ref={(el) => (menuItemsRef.current[index] = el)}
               onMouseEnter={(e) => handleMenuHover(index, e.currentTarget)}
               onMouseLeave={(e) => handleMenuLeave(e.currentTarget)}
-              className="relative px-2.5 py-1 text-white/90 hover:text-white font-medium whitespace-nowrap text-sm transition-all duration-300"
+              className="relative px-4 py-1.5 text-white/90 hover:text-white font-medium whitespace-nowrap text-base transition-all duration-300"
               style={{ transitionProperty: 'transform, color' }}
             >
               {item.name}

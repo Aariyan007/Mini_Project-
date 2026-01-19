@@ -1,0 +1,146 @@
+import React, { useState } from 'react';
+import { GalleryVerticalEnd } from 'lucide-react';      
+
+const Input = ({ className = '', ...props }) => (
+  <input
+    className={`flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-800 dark:bg-gray-950 dark:ring-offset-gray-950 dark:placeholder:text-gray-400 dark:focus-visible:ring-gray-300 ${className}`}
+    {...props}
+  />
+);
+
+const Button = ({ children, variant = 'default', className = '', onClick, type = 'button' }) => {
+  const baseStyles = 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2';
+  const variantStyles = variant === 'outline' 
+    ? 'border border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900'
+    : 'bg-gray-900 text-gray-50 hover:bg-gray-900/90';
+  
+  return (
+    <button type={type} className={`${baseStyles} ${variantStyles} ${className}`} onClick={onClick}>
+      {children}
+    </button>
+  );
+};
+
+function SignupForm({ className = '' }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
+  };
+
+  return (
+    <div className={`flex flex-col gap-6 ${className}`}>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-1 text-center">
+          <h1 className="text-2xl font-bold">Create your account</h1>
+          <p className="text-sm text-gray-500 text-balance">
+            Fill in the form below to create your account
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="name" className="text-sm font-medium">
+            Full Name
+          </label>
+          <Input
+            id="name"
+            type="text"
+            placeholder="John Doe"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="email" className="text-sm font-medium">
+            Email
+          </label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="m@example.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <p className="text-xs text-gray-500">
+            We'll use this to contact you. We will not share your email with anyone else.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="password" className="text-sm font-medium">
+            Password
+          </label>
+          <Input
+            id="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <p className="text-xs text-gray-500">
+            Must be at least 8 characters long.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="confirmPassword" className="text-sm font-medium">
+            Confirm Password
+          </label>
+          <Input
+            id="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          <p className="text-xs text-gray-500">Please confirm your password.</p>
+        </div>
+
+        <Button type="button" onClick={handleSubmit}>Create Account</Button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-gray-500">Or continue with</span>
+          </div>
+        </div>
+
+        <Button variant="outline" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-4 w-4">
+            <path
+              d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              fill="currentColor"
+            />
+          </svg>
+          Sign up with GitHub
+        </Button>
+
+        <p className="px-6 text-center text-xs text-gray-500">
+          Already have an account?{' '}
+          <a href="#" className="underline hover:text-gray-900">
+            Sign in
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+export default SignupForm;
